@@ -1,0 +1,144 @@
+div div {
+	background: pink; 
+	position: relative;
+}
+
+.android{
+	height: 404px;
+	width: 334px;
+	margin: 100px auto;
+	
+}
+.head{
+	width: 220px;
+	height: 100px;
+	top: 32px;
+	border-radius: 110px 110px 0 0;
+	transition: all 0.1s ease-in;
+}
+
+
+.l_eye, .r_eye {
+	background: #fff;
+	width: 20px; 
+	height: 20px;
+	position: absolute; 
+	top: 42px;
+	border-radius: 100%;
+}
+
+.l_eye {
+	left: 50px;
+}
+
+.r_eye {
+	right: 50px;
+}
+
+.l_ant, .r_ant{
+	width: 6px; 
+	height: 50px;
+	position: absolute; 
+	top: -34px;
+	border-radius: 3px;
+}
+
+.l_ant {
+	left: 50px;
+	transform: rotate(-30deg);
+}
+.r_ant {
+	right: 50px;
+	transform: rotate(30deg);
+}
+
+.body{
+	width: 220px; 
+	height: 184px;
+	top: 40px;
+	border-radius: 0 0 25px 25px;
+}
+
+.l_arm, .r_arm, .l_leg, .r_leg {
+	width: 50px; 
+	position: absolute;
+	transition: all 0.1s ease-in;
+}
+
+.l_arm, .r_arm {
+	height: 150px;
+	border-radius: 25px;
+}
+
+.l_leg, .r_leg {
+	height: 80px; 
+	top: 182px;
+	border-radius: 0 0 25px 25px;
+}
+
+.l_arm {
+	left: -58px;
+}
+
+.r_arm {
+	right: -58px;
+}
+
+.l_leg {
+	left: 45px;
+}
+
+.r_leg {
+	right: 45px;
+}
+
+.head:hover {
+	transform: rotate(-5deg) translate(-4px, -8px);
+}
+.l_arm:hover{
+	transform: rotate(15deg) translate(-14px, 0);
+}
+.r_arm:hover{
+	transform: rotate(-30deg) translate(30px, 0);
+}
+.bow {
+	background: #bffff6;
+	width: 25px; height: 25px;
+	position: absolute; 
+	top: 10px; 
+	left: 163px;
+	border-radius: 100%;
+}
+
+.triangle1 {
+	position: absolute; 
+	top: -75px; 
+	left: 80px;
+	transform: rotate(-60deg) skewX(-30deg) scale(.15,.1299);
+}
+.triangle2 {
+	position: absolute; top: -52px; left: 110px;
+	transform: rotate(-120deg) skewX(-30deg) scale(.15,.1299);
+}
+.triangle1, .triangle2 {
+	background-color: #bffff6;
+	text-align: left;
+}
+.triangle1:before, .triangle1:after, .triangle2:before, .triangle2:after {
+	content: '';
+	position: absolute;
+	background-color: inherit;
+}
+.triangle1, .triangle1:before, .triangle1:after, .triangle2, .triangle2:before,.triangle2:after {
+	width:  10em;
+	height: 10em;
+	border-top-right-radius: 30%;
+}
+.triangle1:before, .triangle2:before {
+	transform: rotate(-135deg) skewX(-45deg) scale(1.414,.707) translate(0,-50%);
+}
+.triangle1:after, .triangle2:after {
+	transform: rotate(135deg) skewY(-45deg) scale(.707,1.414) translate(50%);
+}
+
+
