@@ -1,0 +1,38 @@
+body {
+	font-family: Avenir, Sans-serif;
+}
+
+.wrapper {
+	width:600px;
+	margin: 0 auto;
+}
+
+#slider {
+	width: 400px;
+	height: 400px;
+	overflow: hidden;
+	margin: 30px auto;
+}
+
+#slider > img {
+	width:400px;
+	float: left;
+	display: none;
+}
+
+a {
+	padding: 5px 10px;
+	background-color: #f0f0f0;
+	margin-top: 30px;
+	text-decoration: none;
+	color: #666;
+
+}
+
+a.left {
+	float: left;
+}
+
+a.right {
+	float: right;
+}
