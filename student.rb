@@ -185,7 +185,7 @@ end
 returnVal = sayMoo 5
 
 puts returnVal
-=end
+
 
 #This is a method which turns numbers into english strings
 
@@ -287,6 +287,353 @@ puts englishNumber(234)
 puts englishNumber(3211)
 puts englishNumber(999999)
 puts englishNumber(1000000000000)
+
+
+a = Array.new + [1,4,33,5,6]
+b = String.new + "sup!"
+c = Time.new
+
+d = [1,4,33,5,6]
+e = "sup!"
+f = Time.new
+
+g = f+60
+
+puts 'a = ' +a.to_s
+puts 'b = ' +b.to_s
+puts 'c = ' +c.to_s
+puts 'd = ' +d.to_s
+puts 'e = ' +e.to_s
+puts 'f = ' +f.to_s
+
+puts f
+puts g
+
+puts Time.mktime(2000,1,1)
+puts Time.mktime(1988,2,26,10,47)+1000000000
+
+#Ask for someone's birth date and give them x spanks
+puts "year?"
+year = gets.chomp.to_i
+
+puts "month?"
+month = gets.chomp.to_i
+
+puts "day?"
+day = gets.chomp.to_i
+
+birthday = Time.mktime(year,month,day)
+now_time = Time.new
+years_past = (now_time-birthday)/60/60/24/365
+
+puts "SPANK!"*years_past
+
+#Hash or array?
+
+color_array = []
+color_hash = {}
+
+color_array[0] = "red"
+color_array[2] = "green"
+color_array[1] = "blue"
+color_hash["exciting_things"] = "red"
+color_hash["environment_things"] = "green"
+color_hash["wet_things"] = "blue"
+
+color_array.each do |color|
+  puts color
+end
+
+color_hash.each do |code_type,color|
+  puts code_type + ": " + color
+end
+
+
+
+class Integer
+  def to_eng
+    if self == 5
+      english = "five"
+    else
+      english = "not five"
+    end
+
+    english
+  end
+end
+
+puts 5.to_eng
+puts 33.to_eng
+
+
+
+#Making a new class and giving the instances variables
+
+class Dicev1
+  def roll
+    1 + rand(6)
+  end
+end
+
+class Dice
+  def initialize
+    roll
+  end
+  def roll
+    @number_showing = 1 + rand(6)
+  end
+
+  def cheat
+    @number_showing = 0
+    while @number_showing == 0
+      @cheat_num = gets.chomp.to_i
+      if @cheat_num > 6
+        puts "That's too high, try again"
+      elsif @cheat_num < 1
+        puts "That's too low, try again"
+      else
+        @number_showing = @cheat_num
+      end
+    end
+  end
+
+  def showing
+    @number_showing
+  end
+
+end
+
+cheat_dice = Dice.new
+puts "Here's a dice, what would you like to roll?"
+cheat_dice.cheat
+puts "Ok cool, let's see if it worked..."
+puts cheat_dice.showing
+
+
+
+some_dice = [Dice.new, Dice.new]
+
+some_dice.each do |x|
+  x.roll
+  puts x.showing
+  puts x.showing
+  x.roll
+  puts x.showing
+  puts x.showing
+end
+
+=end
+
+#Baby dragon class with variables
+
+class BabyDragon
+
+  def initialize name
+    @name = name
+    @asleep = false
+    @stuff_in_tummy = 10
+    @stuff_in_butt = 0
+
+    puts "#{@name} is born."
+  end
+
+  def feed
+    puts "You feed #{@name}."
+    @stuff_in_tummy = 10
+    passage_of_time
+  end
+
+  def walk
+    puts "You walk #{@name}, he poops!"
+    @stuff_in_butt = 0
+    passage_of_time
+  end
+
+  def put_to_bed
+    puts "You put #{@name} to sleep."
+    @asleep = true
+    
+    3.times do
+      if @asleep
+        passage_of_time
+      end
+      if @asleep
+        puts "#{@name} snores, filling the room with smoke"
+      end
+    end
+
+    if @asleep
+      @asleep = false
+      puts "#{@name} woke up"
+    end
+
+  end
+
+  def toss
+    puts "You toss #{@name} up in the air."
+    puts "He giggles, and burns your eyebrows off."
+    passage_of_time
+  end
+
+  def rock
+    puts "You rock #{@name} gently"
+    @asleep = true
+    puts "He briefly dozes off..."
+    passage_of_time
+    if @asleep
+      @asleep = false
+      puts "...but wakes up when you stop."
+    end
+  end
+
+  private
+
+  def hungry?
+    @stuff_in_tummy <= 2
+  end
+
+  def poopy?
+    @stuff_in_butt >= 8
+  end
+
+  def passage_of_time
+    if @stuff_in_tummy > 0
+      @stuff_in_tummy = @stuff_in_tummy -1
+      @stuff_in_butt = @stuff_in_butt +1
+    else
+      if @asleep
+        @asleep = false
+        puts "He wakes up suddenly!"
+      end
+      puts "#{@name} is starving, in desperation he ate YOU!"
+      exit
+    end
+
+    if @stuff_in_butt >= 10
+      @stuff_in_butt = 0
+      puts "Whoops! #{@name} had an accident..."
+    end
+
+    if hungry?
+      if @asleep
+        @asleep =  false
+        puts "He wakes up with a rumble"
+      end
+      puts "#{@name}'s tummy grumbles"
+    end
+
+    if poopy?
+      if @asleep
+        @asleep = false
+        puts "He wakes up with pffft..."
+      end
+      puts "#{@name} does the potty dance..."
+    end
+
+  end
+
+end
+
+
+pet = BabyDragon.new "Waffles"
+pet.feed
+pet.toss
+pet.walk
+pet.put_to_bed
+pet.rock
+pet.put_to_bed
+
+
+
+
+
+
+class FruitTree
+
+  def initialize fruit
+    @tallness = 1
+    @fruits = 0
+    @age = 0
+    @fruit_type = fruit
+
+    puts "A new #{@fruit_type} tree has begun to grow!"
+  end
+
+  def height
+    puts "The tree is #{@tallness} feet tall"
+  end
+
+  def pick_fruit
+    if @fruits <= 0
+      puts "There are no fruit on the tree!"
+    else
+      @fruits = @fruits - 1
+      puts "You ate one orange, there are #{@fruits} left"
+      self.count_fruits
+    end   
+  end
+
+  def enjoy_the_tree
+    puts "You sit and watch the tree grow..."
+    one_year_passes
+  end
+
+  def count_fruits
+    puts "There are #{@fruits} #{@fruit_type}s on the tree"
+  end
+
+  private
+
+  def one_year_passes
+    @tallness = @tallness + 1
+    @age = @age + 1
+    if @age > 3
+      @fruits = (@fruits + 1) * @age
+    end
+    if @age > 8
+      puts "The tree is old and died..."
+      exit
+    end
+  end
+
+
+end
+
+tree = FruitTree.new "apple"
+
+
+tree.enjoy_the_tree
+tree.height
+tree.enjoy_the_tree
+tree.enjoy_the_tree
+tree.count_fruits
+tree.pick_fruit
+tree.enjoy_the_tree
+tree.count_fruits
+tree.enjoy_the_tree
+tree.count_fruits
+tree.pick_fruit
+tree.pick_fruit
+tree.enjoy_the_tree
+tree.enjoy_the_tree
+tree.count_fruits
+tree.enjoy_the_tree
+tree.enjoy_the_tree
+tree.enjoy_the_tree
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
