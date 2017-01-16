@@ -422,7 +422,7 @@ some_dice.each do |x|
   puts x.showing
 end
 
-=end
+
 
 #Baby dragon class with variables
 
@@ -546,7 +546,7 @@ pet.put_to_bed
 
 
 
-
+#This tree grows and you can interact with it
 
 class FruitTree
 
@@ -569,16 +569,16 @@ class FruitTree
     else
       @fruits = @fruits - 1
       puts "You ate one orange, there are #{@fruits} left"
-      self.count_fruits
+      self.count_fruit
     end   
   end
 
-  def enjoy_the_tree
+  def enjoy_tree
     puts "You sit and watch the tree grow..."
     one_year_passes
   end
 
-  def count_fruits
+  def count_fruit
     puts "There are #{@fruits} #{@fruit_type}s on the tree"
   end
 
@@ -601,41 +601,280 @@ end
 
 tree = FruitTree.new "apple"
 
-
-tree.enjoy_the_tree
-tree.height
-tree.enjoy_the_tree
-tree.enjoy_the_tree
-tree.count_fruits
-tree.pick_fruit
-tree.enjoy_the_tree
-tree.count_fruits
-tree.enjoy_the_tree
-tree.count_fruits
-tree.pick_fruit
-tree.pick_fruit
-tree.enjoy_the_tree
-tree.enjoy_the_tree
-tree.count_fruits
-tree.enjoy_the_tree
-tree.enjoy_the_tree
-tree.enjoy_the_tree
+#trythis = {"measure" => tree.height, "enjoy" => tree.enjoy_the_tree, "count" => tree.count_fruits, "pick" => tree.pick_fruit}
 
 
+puts "What would you like to do with the tree loser: height, pick_fruit, enjoy_tree or count_fruit?"
+selection = gets.chomp
+tree.send selection
+puts "What would you like to do with the tree?"
+selection = gets.chomp
+tree.send selection
+puts "What would you like to do with the tree?"
+selection = gets.chomp
+tree.send selection
+
+
+#Blocks and procs
+
+do_you_like = Proc.new do |a_thing|
+  puts "I really like #{a_thing}!"
+end
+
+do_you_like.call "puppies"
+do_you_like.call "chickens"
+
+def maybeDo someProc
+  if rand(2) == 0
+    someProc.call
+  end
+end
+
+def twiceDo someProc
+  someProc.call
+  someProc.call
+end
+
+wink = Proc.new do
+  puts '<wink>'
+end
+
+glance = Proc.new do
+  puts '<glance>'
+end
+
+maybeDo wink
+maybeDo glance
+twiceDo wink
+twiceDo glance
+
+
+#Methods taking procs as inputs
+
+def doUntilFalse firstInput, someProc
+  input  = firstInput
+  output = firstInput
+
+  while output
+    input  = output
+    output = someProc.call input
+  end
+
+  input
+end
+
+buildArrayOfSquares = Proc.new do |array|
+  lastNumber = array.last
+  if lastNumber <= 0
+    false
+  else
+    array.pop                         # Take off the last number...
+    array.push lastNumber*lastNumber  # ...and replace it with its square...
+    array.push lastNumber-1           # ...followed by the next smaller number.
+  end
+end
+
+alwaysFalse = Proc.new do |justIgnoreMe|
+  false
+end
+
+puts doUntilFalse([5], buildArrayOfSquares).inspect
+puts doUntilFalse('I\'m writing this at 3:00 am; someone knock me out!', alwaysFalse)
+
+
+#Methods returning procs
+
+def compose proc1, proc2
+  Proc.new do |x|
+    proc2.call(proc1.call(x))
+  end
+end
+
+squareIt = Proc.new do |x|
+  x * x
+end
+
+doubleIt = Proc.new do |x|
+  x + x
+end
+
+doubleThenSquare = compose doubleIt, squareIt
+squareThenDouble = compose squareIt, doubleIt
+
+puts doubleThenSquare.call(5)
+puts squareThenDouble.call(5)
+
+
+#Add a method to the array class which takes a block of a proc
+
+class Array
+  def eachEven(&wasABlock_nowAProc) #The BLOCK is do |fruit| puts "Yum! I...."end
+    # We start with "true" because arrays start with 0, which is even.
+    isEven = true
+
+    self.each do |object|
+      if isEven
+        wasABlock_nowAProc.call object
+      end
+
+      isEven = (not isEven)  # Toggle from even to odd, or odd to even.
+    end
+  end
+end
+
+['apple', 'bad apple', 'cherry', 'durian'].eachEven do |fruit|
+  puts 'Yum!  I just love '+fruit+' pies, don\'t you?' #This is the BLOCK which will turn into a PROC
+end
+
+# Remember, we are getting the even-numbered elements
+# of the array, all of which happen to be odd numbers,
+# just because I like to cause problems like that.
+[1, 2, 3, 4, 5].eachEven do |oddBall|
+  puts oddBall.to_s+' is NOT an even number!'
+end
 
 
 
+def profile description_of_block, &block
+  start_time = Time.now
+
+  block.call
+
+  duration = Time.now - start_time
+
+  puts "#{description_of_block} took #{duration} seconds."
+
+end
+
+profile "25000 doublings" do
+  number = 1
+
+  25000.times do
+    number = number + number
+  end
+
+  puts number.to_s.length.to_s+" digits"
+
+end
+
+
+#Some other proc calling itself from within a method
+
+def doSelfImportantly someProc
+  puts 'Everybody just HOLD ON!  I have something to do...'
+  someProc.call
+  puts 'Ok everyone, I\'m done.  Go on with what you were doing.'
+end
+
+sayHello = Proc.new do
+  puts 'hello'
+end
+
+sayGoodbye = Proc.new do
+  puts 'goodbye'
+end
+
+doSelfImportantly sayHello
+doSelfImportantly sayGoodbye
 
 
 
+#Write a grandfather clock that uses a block to DONG for every hour of the day
+
+def grandfather_clock(&dong_block)
+  hours_passed_today = Time.now.hour
+  if hours_passed_today > 12
+    hours_passed_today = hours_passed_today/2
+  end
+
+  hours_passed_today.times do
+    dong_block.call
+  end
+
+end
+
+
+grandfather_clock do 
+  puts "DONG!"
+end
+
+
+#Blocks upon blocks upon blocks
+
+$nesting_depth = 0
+
+def log description_of_block
+  puts "  "*$nesting_depth + "Beginning #{description_of_block}..."
+  $nesting_depth = $nesting_depth + 1
+  somethingweird = yield
+  $nesting_depth = $nesting_depth -1
+  puts "  "*$nesting_depth + "...#{description_of_block} finished returning: #{somethingweird}"
+
+
+end
+
+
+log "outer block" do
+  log "some little block" do
+    log "teeny tiny block" do
+      "lots of love"
+    end
+    42
+  end
+  log "yet another block" do
+    "I like indian food"
+  end
+  true
+end
 
 
 
+#Find the sum of all the multiples of 3 or 5 below 1000.
+
+array_of_multiples = []
+final_sum = 0
+i = 0
+
+while i < 1001
+  if i%3 == 0
+    array_of_multiples.push i
+    final_sum = final_sum + i
+  elsif i%5 == 0
+    array_of_multiples.push i
+    final_sum = final_sum + i
+  end
+  i = i+1
+end
+
+puts array_of_multiples
+puts final_sum
+=end
+
+#By considering the terms in the Fibonacci sequence whose values do not exceed four million, find the sum of the even-valued terms.
+
+def fibonacci number_to_reach
+  num1 = 1
+  num2 = 2
+  latest_number = 0
+  sum_of_evens = 2
+
+  while latest_number < number_to_reach
+    latest_number = num1+num2
+    num1 = num2
+    num2 = latest_number
+    if latest_number%2 == 0
+      sum_of_evens = sum_of_evens + latest_number
+    end
 
 
+  end
+
+  puts sum_of_evens
+
+end
 
 
-
+fibonacci 4000000
 
 
 
