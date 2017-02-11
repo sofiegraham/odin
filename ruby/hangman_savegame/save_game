@@ -1,0 +1,18 @@
+---
+:answer: raggedy
+:game_string:
+- _
+- a
+- _
+- _
+- e
+- _
+- _
+:current_guess: 0
+:correct_letters:
+- e
+- a
+:incorrect_letters: []
+:game_status: playing
+:message_to_player: ''
+:allowed_guesses: 6
