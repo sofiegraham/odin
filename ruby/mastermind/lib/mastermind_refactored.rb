@@ -1,24 +1,65 @@
 require "./mastermind/version.rb"
 require 'colorize'
+require 'byebug'
 
 module Mastermind
+  ROW_LENGTH = 4
+  NUM_GUESSES = 3
 
   class Board
     attr_accessor :grid
 
+
     def initialize
-      @grid = Array.new(12) { GridRow.new }
+      @grid = Array.new(NUM_GUESSES) { GridRow.new }
     end
 
     class GridRow
       attr_accessor :row, :hints, :guesses, :status
       def initialize
-        @guesses = Array.new(4) {"▢"}
-        @hints = Array.new(4) {"."}
+        @guesses = build_row("▢")
+        @hints = build_row(".")
         @row = [guesses, hints]
         @status = "empty"
       end
+  
+      def build_row(sym)
+        Array.new(ROW_LENGTH) { sym }
+        GridPosition.new(:black)
+      end
+
+      class Guess
+        COLORS = {
+          blue: 'light_blue'
+          magenta: 'light_magenta'
+          cyan: 'light_cyan'
+          yellow: 'light_yellow'
+          blank: ''
+        }
+
+        def initalize
+          set_color(:blank)
+        end
+
+        def set_color(color)
+          raise unless COLORS[color]
+          self.color = color
+        end
+
+        def to_s
+          COLORS[color]
+        end
+
+        private
+
+        attr_accessor :color
+      end
+
+      def Hint
+        
+      end
     end
+
 
     def show_grid
       system "clear"
@@ -46,7 +87,7 @@ module Mastermind
     def random_answer
       answer =[]
       options = ["⬤".light_blue, "⬤".light_magenta, "⬤".light_yellow, "⬤".light_cyan]
-      4.times { answer << options.sample }
+      ROW_LENGTH.times { answer << options.sample }
       answer
     end
 
@@ -64,11 +105,11 @@ module Mastermind
     end
 
       def player_guess
-        4.times do |i|
+        ROW_LENGTH.times do |i|
           error = nil
           while board.grid[current_guess].guesses[i] == "▢"
             board.show_grid
-            puts " ".center(50)
+            puts " "
             puts error if error
             puts "Pick a color for slot #{i+1}:"
             puts "#{'1: violet'.light_blue} - #{'2: yellow'.light_yellow} - #{'3: blue'.light_cyan} - #{'4: pink'.light_magenta}"
@@ -84,7 +125,7 @@ module Mastermind
           board.show_grid
           puts @answer.join(" ")
           puts "A WINNER IS YOU!"
-        elsif @current_guess == 12
+        elsif @current_guess == NUM_GUESSES
           @game_status = :ended
           board.show_grid
           puts @answer.join(" ")
@@ -128,11 +169,11 @@ module Mastermind
           end
         end
 
-        hint_pegs << "." until hint_pegs.length == 4
+        hint_pegs << "." until hint_pegs.length == ROW_LENGTH
         hint_pegs
       end
 
   end
-  Game.new
+  game = Game.new
 
 end
