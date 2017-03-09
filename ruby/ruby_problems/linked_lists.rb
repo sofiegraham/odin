@@ -44,7 +44,7 @@ class LinkedList
 	end
 
 	def head
-		@head
+		@head ? @head : nil
 	end
 
 	def tail
@@ -172,13 +172,4 @@ class Node
 	end
 end
 
-
-
-
 waffles = LinkedList.new
-
-
-
-
-
-
