@@ -41,20 +41,17 @@ class BinaryTree
 
 	def breadth_first_search(target)
 		result = nil
+		queue = [@root]
 
-		if @root.value == target
-			result = @root
-		else
-			queue = [@root.child_1, @root.child_2]
+		until queue.length == 0
 
-			queue.each do |node|
-				if node.value == target
-					result = node
-					break
-				else
-					queue += [node.child_1, node.child_2]
-					queue.shift
-				end
+			if queue[0].value == target
+				result = queue[0]
+				break
+			else
+				queue << queue[0].child_1 if queue[0].child_1
+				queue << queue[0].child_2 if queue[0].child_2
+				queue.shift
 			end
 		end
 		result
@@ -67,18 +64,18 @@ class BinaryTree
 			result = @root
 		else
 			stack = [@root]
+			checked = []
 
 			until stack.length == 0
-				byebug
 				if stack[-1].value == target
 					result = stack[-1]
 					break
-				elsif stack[-1].child_1
+				elsif stack[-1].child_1 && !checked.include?(stack[-1].child_1)
 					stack << stack[-1].child_1
-					stack[-2].child_1 = nil
-				elsif stack[-1].child_2
+					checked << stack[-2].child_1
+				elsif stack[-1].child_2 && !checked.include?(stack[-1].child_2)
 					stack << stack[-1].child_2
-					stack[-2].child_2 = nil
+					checked << stack[-2].child_2
 				else
 					stack.pop
 				end
@@ -88,18 +85,29 @@ class BinaryTree
 	end
 
 	def depth_first_recursive(target, current_node=@root)
-		if !current_node.child_1 && !current_node.child_2
-			return
+		
+		if current_node.child_1 && depth_first_recursive(target, current_node.child_1)
+			depth_first_recursive(target, current_node.child_1)
+		elsif current_node.value == target
+			return current_node
+		elsif current_node.child_2 && depth_first_recursive(target, current_node.child_2)
+			depth_first_recursive(target, current_node.child_2)
+		else
+			nil
+		end
+		
 	end
 	
 
 end
 
-tree = BinaryTree.new([7,4,5,0,8,33,5,9,19])
+tree = BinaryTree.new([7,4,4,0,8,33,5,9,19])
 
-tree.breadth_first_search(9)
+puts tree.breadth_first_search(9)
 
-tree.depth_first_search(9)
+puts tree.depth_first_search(9)
+
+puts tree.depth_first_recursive(9)
 
 
 
