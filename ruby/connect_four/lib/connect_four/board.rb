@@ -132,12 +132,18 @@ end
       result = nil
       x = 0
       y = 0
-      until !on_board([x,y])
+      until counter >= 4 || !on_board([x,y])
         cell = coordinates_to_cell([x,y])
         if cell_empty?(cell)
-          x += 1
-          y += 1
+          counter = 0
+          value = nil
+        elsif value #check if the value is the same or exists
+          value ||= cell.value
+          counter += 1
         end
+        x += 1
+        y += 1
+
       end
 
 
