@@ -1,4 +1,8 @@
 def ceasar_cipher(string, number)
+	until number <= 26
+		number -= 26
+	end
+
 	letters = string.split("")
 	letters.each_with_index do |item, index|
 		if letters[index].match(/\b[A-Z]/)

@@ -1,4 +1,5 @@
 class Game
+	attr_accessor :player_x, :player_o, :board, :current_player, :game_status
 
 	def initialize(player1, player2)
 		@player_x = Player.new(player1, "X")
@@ -11,7 +12,6 @@ class Game
 		}
 		@current_player = @player_x
 		@game_status = "playing"
-		self.game_loop
 	end
 
 	def show_board(board)
@@ -31,7 +31,7 @@ class Game
 	end
 
 	def game_loop
-		while @game_status = "playing"
+		while @game_status == "playing"
 			error = ""
 			selection_made = false
 			while selection_made == false
@@ -83,5 +83,3 @@ class Game
 	end
 
 end
-
-new_game = Game.new("Sofie", "Connor")
