@@ -21,6 +21,15 @@ module ConnectFour
       board
     end
 
+    let(:diagonal_winning_board) do
+      board = Board.new
+      board.change_value([2,1],"Z")
+      board.change_value([3,2],"Z")
+      board.change_value([4,3],"Z")
+      board.change_value([5,4],"Z")
+      board
+    end
+
     let(:full_board) do
       board = Board.new
       board.grid.each do |row|
@@ -85,6 +94,11 @@ module ConnectFour
         expect(vertical_winning_board.vertical_check).to eq("Y")
       end
     end
+    context ".diagonal_check" do
+      it "returns the winning value if a diagonal connect 4 has been made" do
+        expect(diagonal_winning_board.diagonal_check).to eq("Z")
+      end
+    end
     context ".win_check" do
       it "returns the winner in horizontal winning conditions is met" do
         expect(horizontal_winning_board.win_check).to eq("X")
@@ -104,6 +118,24 @@ module ConnectFour
         expect(vertical_winning_board.board_full?).to eq(false)
       end
     end
-
+    context ".valid_move?" do
+      it "returns true if the cell is empty" do
+        expect(board.valid_move?([5,0])).to eq(true)
+      end
+      it "returns false if the cell contains a value" do
+        expect(vertical_winning_board.valid_move?([2,1])).to eq(false)
+      end
+      it "returns false if the cell is floating" do
+        expect(diagonal_winning_board.valid_move?([4,1])).to eq(false)
+      end
+    end
+    context ".floating?" do
+      it "returns true if the cell is floating" do
+        expect(board.floating?([0,0])).to eq(true)
+      end
+      it "returns false if the cell is not floating" do
+        expect(diagonal_winning_board.floating?([2,2])).to eq(false)
+      end
+    end
   end
 end
