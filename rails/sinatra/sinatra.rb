@@ -1,5 +1,5 @@
 require 'sinatra'
 
-get '/frank-says' do
+get '/sinatra' do
 	'Put this in your pipe and smoke it!'
 end
