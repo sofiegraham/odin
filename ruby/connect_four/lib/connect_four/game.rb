@@ -7,7 +7,6 @@ module ConnectFour
       @player2 = Player.new({name: player2, color: "Y"})
       @board = Board.new
       @current_player = @player1
-      game_loop
     end
 
     def game_loop
@@ -35,8 +34,8 @@ module ConnectFour
       coordinates = nil
       valid = false
       until valid
-        x = gets.chomp.to_i
-        y = gets.chomp.to_i
+        x = STDIN.gets.chomp.to_i
+        y = STDIN.gets.chomp.to_i
         valid = @board.valid_move?([x,y]) ? true : false
       end
       coordinates = [x,y]
