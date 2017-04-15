@@ -5,8 +5,6 @@ require 'sinatra/reloader'
 class GuessingGame
 	attr_accessor :guesses_remaining, :secret_number, :message, :background_color
 
-	SECRET_NUMBER = rand(100)
-
 	def initialize
 		@guesses_remaining = 5
 		@secret_number = rand(100)
@@ -23,17 +21,22 @@ class GuessingGame
 			result = :none
 		when guess > @secret_number + 5
 			result = :high_high
+			@guesses_remaining -= 1
 		when guess > @secret_number
 			result = :high
+			@guesses_remaining -= 1
 		when guess < @secret_number - 5
 			result = :low_low
+			@guesses_remaining -= 1
 		when guess < @secret_number
 			result = :low
+			@guesses_remaining -= 1
 		when guess == @secret_number
 			result = :correct
 		end
 		@background_color = background_color_select(result)
 		@message = message_select(result)
+		fail_check(result)
 	end
 
 	def background_color_select(result)
@@ -54,19 +57,34 @@ class GuessingGame
 	end
 
 	def message_select(result)
+		text = ""
 		case result
 		when :high_high
-			"Your guess is WAY too high!"
+			text = "Your guess is WAY too high!"
 		when :high
-			"Your guess is too high!"
+			text = "Your guess is too high!"
 		when :low_low
-			"Your guess is WAY too low!"
+			text = "Your guess is WAY too low!"
 		when :low
-			"Your guess is too low!"
+			text = "Your guess is too low!"
 		when :correct
-			"Your guess is correct!"
+			text = "Your guess is correct!"
 		else
-			"Guess a number please!"
+			text = "Guess a number please!"
+		end
+		text
+
+	end
+
+	def fail_check(result)
+		if result != :correct && @guesses_remaining <= 0
+			@message = "You lost, and your face is a butt! Try a new number."
+			@secret_number = rand(100)
+			@guesses_remaining = 5
+		elsif result == :correct
+			@message = "A winner is YOU! Try a new number."
+			@secret_number = rand(100)
+			@guesses_remaining = 5
 		end
 	end
 end
@@ -75,8 +93,6 @@ GAME = GuessingGame.new
 
 get '/' do
 	guess = params['guess']
-	GAME.check_guess(guess)
-
 
 	hint = GAME.check_guess(guess)
 	message = GAME.message_select(hint)
