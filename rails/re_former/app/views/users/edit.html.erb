@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>New User</title>
+</head>
+<body>
+
+<% if @user.errors.any? %>
+  <div id="error_explanation">
+    <h2><%= pluralize(@user.errors.count, "error") %> prohibited this post from being saved:</h2>
+
+    <ul>
+    <% @user.errors.full_messages.each do |msg| %>
+      <li><%= msg %></li>
+    <% end %>
+    </ul>
+  </div>
+<% end %>
+
+
+
+<%= form_for @user, url: {action: "update"} do |f| %>
+  <%= f.label :username %>
+  <%= f.text_field :username %>
+  <%= f.label :email %>
+  <%= f.text_field :email %>
+  <%= f.label :password %>
+  <%= f.password_field :password %>
+  <%= f.submit "Submit" %>
+<% end %>
+
+
+
+</body>
+</html>
